@@ -15,6 +15,7 @@
   networking.hostName = "nix"; # Define your hostname.
   # Handled by gnome3
   #networking.wireless.enable = true;  # Enables wireless support via wpa_supplicant.
+  networking.networkmanager.enable = true;
 
   # Select internationalisation properties.
   # i18n = {
@@ -29,8 +30,11 @@
   # List packages installed in system profile. To search, run:
   # $ nix search wget
   environment.systemPackages = with pkgs; [
-    wget neovim curl bash sudo gnupg git jq gnumake
+    wget neovim curl bash sudo gnupg git jq gnumake sshpass
     firefox thunderbird transmission-gtk vlc libreoffice-fresh
+    networkmanagerapplet
+    networkmanager-openconnect
+    networkmanager-openvpn
     docker docker_compose kubectl
     go dep
     ruby
@@ -65,11 +69,15 @@
   # networking.firewall.allowedTCPPorts = [ ... ];
   # networking.firewall.allowedUDPPorts = [ ... ];
   # Or disable the firewall altogether.
-  # networking.firewall.enable = false;
+  networking.firewall.enable = true;
 
   # Enable sound.
   sound.enable = true;
-  hardware.pulseaudio.enable = true;
+  hardware.pulseaudio = {
+    enable = true;
+    package = pkgs.pulseaudioFull;
+  };
+  hardware.bluetooth.enable = true;
 
   services.acpid.enable = true;
 
